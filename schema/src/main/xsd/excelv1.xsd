@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ev1="http://www.danielrendall.co.uk/saas/excel/v1"
+           targetNamespace="http://www.danielrendall.co.uk/saas/excel/v1"
+           elementFormDefault="qualified">
+
+    <xs:annotation>
+        <xs:documentation>
+            Root element of the spreadsheet - it needs a name, and the version attribute must
+            be set to 1 (for this verion of the schema). A spreadsheet can have one or more
+            tabs.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="spreadsheet">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ev1:tab"  minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" type="xs:string"/>
+            <xs:attribute name="version" use="required" fixed="1"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:annotation>
+        <xs:documentation>
+            A tab in the spreadsheet; it must have a name, may optionally have a header (i.e.
+            some rows that will be frozen) and it must have a container of rows (though this
+            may be empty)
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="tab">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ev1:header" minOccurs="0"/>
+                <xs:element ref="ev1:body" minOccurs="1"/>
+            </xs:sequence>
+
+            <xs:attribute name="name" use="required" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:annotation>
+        <xs:documentation>
+            The header of the spreadsheet, which may contain any number of rows. These rows
+            will be frozen at the top of the spreadsheet.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="header" type="ev1:rowContainer"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            The body of the spreadsheet, which may contain any number of rows.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="body" type="ev1:rowContainer"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            A container of rows
+        </xs:documentation>
+    </xs:annotation>
+    <xs:complexType name="rowContainer">
+        <xs:sequence>
+            <xs:element ref="ev1:row" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:annotation>
+        <xs:documentation>
+            A row of cells. Note that merged / split cells are currently unsupported. There
+            are no checks that rows all have the same number of cells.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="row">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ev1:cell" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:annotation>
+        <xs:documentation>
+            A cell. Most cells are string cells; you can specify a type of cell (see the
+            cellType enumeration) and we will try to coerce whatever you enter to that type.
+            If this fails, we fall back to a string, but attach a comment to the cell in question
+            highlighting the error.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="cell">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="type" default="string" type="ev1:cellType"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="cellType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="string"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="dateTime"/>
+            <xs:enumeration value="date"/>
+            <xs:enumeration value="time"/>
+            <xs:enumeration value="decimal"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
