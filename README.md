@@ -57,3 +57,5 @@ WARNING - this is pretty much untested at the moment
 
 * Needs proper documentation
 * And also some actual tests
+* Figure out how to make the "release" task only release the artifact generated
+  by the "plugin" project
