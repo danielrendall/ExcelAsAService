@@ -36,7 +36,7 @@ lazy val plugin = (project in file("plugin"))
     name := "excel-as-a-service",
     scalaVersion := "3.1.0",
     libraryDependencies ++= Seq(
-      "uk.co.danielrendall" % "services-as-a-service-interfaces_3" % "0.0.1-SNAPSHOT",
+      "uk.co.danielrendall" % "services-as-a-service-interfaces_3" % "0.0.1",
       "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0",
       "org.apache.poi" % "poi-ooxml" % "5.1.0", // This brings in loads of dependencies which is slightly annoying...
       "org.nanohttpd" % "nanohttpd" % "2.3.1" % Provided
