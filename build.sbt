@@ -8,7 +8,7 @@ ThisBuild / organization     := "uk.co.danielrendall"
 ThisBuild / organizationName := "excel-as-a-service"
 
 githubOwner := "danielrendall"
-githubRepository := "XsltAsAService"
+githubRepository := "ExcelAsAService"
 githubTokenSource := TokenSource.Environment("GITHUB_TOKEN")
 releaseCrossBuild := true
 
