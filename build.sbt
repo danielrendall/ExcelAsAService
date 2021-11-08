@@ -7,10 +7,9 @@ ThisBuild / scalaVersion     := "2.13.7"
 ThisBuild / organization     := "uk.co.danielrendall"
 ThisBuild / organizationName := "excel-as-a-service"
 
-githubOwner := "danielrendall"
-githubRepository := "ExcelAsAService"
-githubTokenSource := TokenSource.Environment("GITHUB_TOKEN")
-releaseCrossBuild := true
+ThisBuild / githubOwner := "danielrendall"
+ThisBuild / githubRepository := "ExcelAsAService"
+ThisBuild / githubTokenSource := TokenSource.Environment("GITHUB_TOKEN")
 
 lazy val dispatchVersion = "1.2.0"
 
@@ -35,8 +34,8 @@ lazy val plugin = (project in file("plugin"))
   .settings(
     name := "excel-as-a-service",
     scalaVersion := "3.1.0",
-    libraryDependencies ++= Seq(
-      "uk.co.danielrendall" % "services-as-a-service-interfaces_3" % "0.0.1",
+      libraryDependencies ++= Seq(
+      "uk.co.danielrendall" %% "services-as-a-service-interfaces" % "0.0.1",
       "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0",
       "org.apache.poi" % "poi-ooxml" % "5.1.0", // This brings in loads of dependencies which is slightly annoying...
       "org.nanohttpd" % "nanohttpd" % "2.3.1" % Provided
