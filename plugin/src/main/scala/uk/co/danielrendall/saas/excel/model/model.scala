@@ -1,5 +1,6 @@
 package uk.co.danielrendall.saas.excel.model
 
+import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.Comment
 import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFCellStyle, XSSFComment, XSSFCreationHelper, XSSFRow, XSSFSheet, XSSFWorkbook}
 import org.apache.poi.ss.util.WorkbookUtil
@@ -75,6 +76,14 @@ sealed trait Cell:
 case class StringCell(s: String) extends Cell:
   override def addToCell(excelCell: XSSFCell)
                         (implicit helper: ExcelHelper): Unit = excelCell.setCellValue(s)
+
+case class HyperlinkCell(s: String, href: String) extends Cell:
+  override def addToCell(excelCell: XSSFCell)
+                        (implicit helper: ExcelHelper): Unit =
+    val hyperlink = helper.creationHelper.createHyperlink(HyperlinkType.URL)
+    hyperlink.setAddress(href)
+    hyperlink.setLabel(s)
+    excelCell.setHyperlink(hyperlink)
 
 case class IntCell(i: BigInt) extends Cell:
   // TODO

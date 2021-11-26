@@ -92,6 +92,7 @@
             <xs:simpleContent>
                 <xs:extension base="xs:string">
                     <xs:attribute name="type" default="string" type="ev1:cellType"/>
+                    <xs:attribute name="href" use="optional" type="xs:anyURI"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>

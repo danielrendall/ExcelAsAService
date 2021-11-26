@@ -23,8 +23,14 @@ object V1:
   def makeCell(rawCell: RawCell): Cell =
     try {
       rawCell.typeValue match {
-        case _@RawString =>
-          StringCell(rawCell.value)
+        case _@RawString => {
+          rawCell.href match {
+            case Some(href) =>
+              HyperlinkCell(rawCell.value, href.toURL.toExternalForm)
+            case None =>
+              StringCell(rawCell.value)
+          }
+        }
         case _@RawInt =>
           IntCell(BigInt(rawCell.value))
         case _@RawBoolean =>
