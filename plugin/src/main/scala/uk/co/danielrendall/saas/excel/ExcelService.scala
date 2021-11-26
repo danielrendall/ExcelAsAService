@@ -17,24 +17,19 @@ import scala.xml.Elem
 class ExcelService
   extends ServiceableSupport:
 
-  override def getMetadata: ServiceMetadata = ???
+  override def getMetadata: ServiceMetadata = ServiceMetadata("Excel")
 
   override def post(session: ServiceSession, first: String, rest: List[String])
                    (implicit responseFactory: ResponseFactory): NanoHTTPD.Response =
     (for {
       byteArray <- Try(session.bodyAsBytes)
-      _ <- Try(println("Got body bytes: " + byteArray.length))
       elem <- Try(XML.load(new ByteArrayInputStream(byteArray)))
-      _ <- Try(println("Created element"))
       spreadsheet <- loadVersioned(elem)
     } yield {
-      println("Got spreadsheet: " + spreadsheet)
       val os = new ByteArrayOutputStream()
       convertToExcel(spreadsheet, os)
-      println("Converted to Excel")
       os.close()
       val bytes = os.toByteArray
-      println("Got " + bytes.length + " bytes")
       responseFactory.newFixedLengthResponse(Status.OK,
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         new ByteArrayInputStream(bytes),
@@ -43,7 +38,6 @@ class ExcelService
     }).toOption.getOrElse(badRequest("Couldn't convert"))
 
   def loadVersioned(elem: Elem): Try[Spreadsheet] = {
-    println("Source element is " + elem.mkString)
     val version = elem.attribute("version").map(_.mkString).getOrElse("")
     if (version == "1") {
       import uk.co.danielrendall.saas.excel.generated.v1.*
